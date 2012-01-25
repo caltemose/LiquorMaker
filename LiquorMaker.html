@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>LiquorMaker</title>
+	
+	<script src="http://code.jquery.com/jquery-latest.js" type="text/javascript" language="javascript"></script>
+	<script type="text/javascript">		
+		function calculate() {
+			if ($('#target_percent').val() != '') {
+				var starter = $('#amount_macerated').val();
+				var starter_percent = $('#percent_used').val();
+				var target_percent = $('#target_percent').val();
+				
+				var total = starter_percent / target_percent;
+				total = total * starter;
+				
+				var to_add = total - starter;
+				
+				$('#liquid_total').val(total);
+				$('#syrup_add').val(to_add);
+				
+			}  /*else if ($('#liquid_total').val() != '') {
+				var starter = $('#amount_macerated').val();
+				var starter_percent = $('#percent_used').val();
+				var total = $('#target_percent').val();
+				
+				var total = starter_percent / target_percent;
+				total = total * starter;
+				
+				var to_add = total - starter;
+				
+				$('#liquid_total').val(total);
+				$('#liquid_add').val(to_add);
+			
+			}*/
+			
+			
+			$('#alcohol_form').preventDefault();
+			return false;
+		}
+		
+		$('#alcohol_form INPUT[name="submit"]').click(function(){
+			alert('click');
+		});
+		
+	</script>
+	
+	<style type="text/css">
+		BODY {
+			font-family: Arial, sans-serif;
+			font-size: 100%;
+			margin: 1em;
+			padding: 0;
+			width: 90%;
+			background: #fff;
+		}
+		FORM {
+			width: 15em;
+			float: left;
+			padding: 1em;
+			border: 1px solid #ccc;
+			background: #ddd;
+		}
+		INPUT {
+			font-size: 130%;
+			width: 100%;
+		}
+		INPUT[name="submit"] {
+			border-radius: 0.5em;
+			border-color: #2B62FF;
+			border-width: 2px;
+			background: #87C3FF;
+		}
+		LABEL {
+			display: block;
+		}
+		FORM DIV {
+			margin: 0 0 1em 0;
+		}
+		DIV#liquorMaker {
+			width: 47em;
+			margin: 0 auto;
+			overflow: auto;
+		}
+		DIV#info {
+			float: left;
+			margin-left: 1em;
+			padding: 1em;
+			width: 25em;
+			border: 1px solid #ddd;
+			overflow: auto;
+			color: #555;
+		}
+		DIV#info P {
+			font-size: 80%;
+		}
+		H2 {
+			margin: 1em 0 0 0;
+			padding: 0;
+		}
+		DIV#info H2:first-child {
+			margin-top: 0;
+		}
+		H3 {
+			margin: 1em 0 0 0;
+			font-size: 1.1em;
+		}
+		P {
+			line-height: 130%;
+		}
+	</style>
+	
+</head>
+<body>
+
+<div id="liquorMaker">
+	<h1>LiquorMaker</h1>
+
+	<form id="alcohol_form">
+		<div id="amount_macerated_container">
+			<label for="amount_macerated">Amount macerated:</label>
+			<input type="number" size="20" name="amount_macerated" id="amount_macerated_field" />
+			<span class="errorContainer"></span>
+		</div>
+		<div id="percent_used_container">
+			<label for="percent_used">Percent alcohol used:</label>
+			<input type="number" size="20" name="percent_used" id="percent_used" class="required" />
+			<span class="errorContainer"></span>
+		</div>
+		<div id="target_percent_container">
+			<label for="target_percent">Target Percent:</label>
+			<input type="number" size="20" name="target_percent" id="target_percent"  />
+			<span class="errorContainer"></span>
+		</div>
+		<div id="syrup_add_container">
+			<label for="syrup_add">Syrup to add:</label>
+			<input type="number" size="20" name="syrup_add" id="syrup_add" />
+			<span class="errorContainer"></span>
+		</div>
+		<div id="liquid_total_container">
+			<label for="liquid_total">For a total:</label>
+			<input type="number" size="20" name="liquid_total" id="liquid_total"  />
+			<span class="errorContainer"></span>
+		</div>
+		
+		<input type="submit" name="submit" value="Calculate" />
+		
+	</form>
+	
+	<div id="info">
+		
+		<h2>What to Do</h2>
+		<p>First you need to macerate your flavorings. For limoncello the lenght of time varies but I follow the Vincent Schiavelli's recipe and macerate citrus skins for 4 days (or so).</p>
+		
+		<p>When that's ready, measure the amount of macerated alcohol you have. Type that amount (I stick with the metric system) into the <strong>Amount macerated</strong> field. Then type in the <strong>percent of alcohol</strong> you used (grain alcohol ranges from 75% to 95%). Then type in your <strong>target percent</strong>. For limoncello, the standard is about 38%. Then click <strong>Calculate</strong> and you'll know how much syrup to add and how much liquor you'll end up with.</p>
+		
+		<h2>Why I Built LiquorMaker</h2>
+		<p>I built LiquorMaker to determine how much simple syrup to add to the macerated grain alcohol I use to make liquors like Limoncello. I start by macerating some lemon skins (or cinnamon sticks or <a href="http://www.ferrarapan.com/html/redhot.html" rel="external">Red Hots</a>) in grain alcohol (Everclear is what I use) and later adding simple syrup (sugar dissolved in water) to sweeten the grain alcohol and reduce the alcohol percentage.</p>
+		
+	</div>
+</div>
+
+</body>
+</html>
+
