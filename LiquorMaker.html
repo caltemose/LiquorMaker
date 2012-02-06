@@ -6,19 +6,58 @@
 	
 	<script src="http://code.jquery.com/jquery-latest.js" type="text/javascript" language="javascript"></script>
 	<script type="text/javascript">		
+	
+		$(document).ready(function(){
+			$('#alcohol_form INPUT[name="submit"]').click(function(){
+				calculate();
+				return false;
+			});
+		});
+	
+		function isBad(value) {
+			return value==''||isNaN(value);
+		}
+	
 		function calculate() {
 			if ($('#target_percent').val() != '') {
+			
 				var starter = $('#amount_macerated').val();
 				var starter_percent = $('#percent_used').val();
 				var target_percent = $('#target_percent').val();
+				
+				var valid = true;
+				
+				if (isBad(starter_percent)) {
+					console.log('starter_percent bad');
+					valid = false;
+					$('#percent_used_container SPAN.errorContainer').text( "Percent alcohol must be a legit number.");
+				}
+				
+				if (isBad(target_percent)) {
+					console.log('target_percent bad');
+					valid = false;
+					$('#target_percent_container SPAN.errorContainer').text( "Target percent must be a legit number.");
+				}
+				
+				
+				if (!valid) {
+					console.log("form is not filled in correctly.");
+					return;
+				}
 				
 				var total = starter_percent / target_percent;
 				total = total * starter;
 				
 				var to_add = total - starter;
 				
-				$('#liquid_total').val(total);
-				$('#syrup_add').val(to_add);
+				console.log("starter: " + starter);
+				console.log("starter_percent: " + starter_percent);
+				console.log("target_percent: " + target_percent);
+				console.log("total: " + total);
+				console.log("to add: " + to_add);
+				
+				//$('#liquid_total').val(total);
+				//$('#syrup_add').val(to_add);
 				
 			}  /*else if ($('#liquid_total').val() != '') {
 				var starter = $('#amount_macerated').val();
@@ -36,13 +75,11 @@
 			}*/
 			
 			
-			$('#alcohol_form').preventDefault();
-			return false;
+			//$('#liquorMaker').preventDefault();
+			//return false;
 		}
 		
-		$('#alcohol_form INPUT[name="submit"]').click(function(){
-			alert('click');
-		});
+		
 		
 	</script>
 	
@@ -109,6 +146,10 @@
 		P {
 			line-height: 130%;
 		}
+		.errorContainer {
+			font-size: .8em;
+			color: #c00;
+		}
 	</style>
 	
 </head>
@@ -120,17 +161,17 @@
 	<form id="alcohol_form">
 		<div id="amount_macerated_container">
 			<label for="amount_macerated">Amount macerated:</label>
-			<input type="number" size="20" name="amount_macerated" id="amount_macerated_field" />
+			<input type="number" size="20" name="amount_macerated" id="amount_macerated" value="200" />
 			<span class="errorContainer"></span>
 		</div>
 		<div id="percent_used_container">
 			<label for="percent_used">Percent alcohol used:</label>
-			<input type="number" size="20" name="percent_used" id="percent_used" class="required" />
+			<input type="number" size="20" name="percent_used" id="percent_used" class="required" value="95" />
 			<span class="errorContainer"></span>
 		</div>
 		<div id="target_percent_container">
 			<label for="target_percent">Target Percent:</label>
-			<input type="number" size="20" name="target_percent" id="target_percent"  />
+			<input type="number" size="20" name="target_percent" id="target_percent"  value="38" />
 			<span class="errorContainer"></span>
 		</div>
 		<div id="syrup_add_container">
@@ -151,7 +192,7 @@
 	<div id="info">
 		
 		<h2>What to Do</h2>
-		<p>First you need to macerate your flavorings. For limoncello the lenght of time varies but I follow the Vincent Schiavelli's recipe and macerate citrus skins for 4 days (or so).</p>
+		<p>First you need to macerate your flavorings. For limoncello the length of time varies but I follow Vincent Schiavelli's recipe and macerate citrus skins for 4 days (or so).</p>
 		
 		<p>When that's ready, measure the amount of macerated alcohol you have. Type that amount (I stick with the metric system) into the <strong>Amount macerated</strong> field. Then type in the <strong>percent of alcohol</strong> you used (grain alcohol ranges from 75% to 95%). Then type in your <strong>target percent</strong>. For limoncello, the standard is about 38%. Then click <strong>Calculate</strong> and you'll know how much syrup to add and how much liquor you'll end up with.</p>
 		
