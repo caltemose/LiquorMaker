@@ -19,67 +19,49 @@
 		}
 	
 		function calculate() {
-			if ($('#target_percent').val() != '') {
-			
-				var starter = $('#amount_macerated').val();
-				var starter_percent = $('#percent_used').val();
-				var target_percent = $('#target_percent').val();
+			var amount_flavored = $('#amount_flavored').val();
+			var percent_used = $('#percent_used').val();
+			var target_percent = $('#target_percent').val();
+			var liquid_total = $('#liquid_total').val();
 				
+				
+			if ( !isBad($('#target_percent').val()) ) {
+							
 				var valid = true;
 				
-				if (isBad(starter_percent)) {
-					console.log('starter_percent bad');
+				if (isBad(percent_used)) {
+					console.log('percent_used bad');
 					valid = false;
 					$('#percent_used_container SPAN.errorContainer').text( "Percent alcohol must be a legit number.");
-				}
-				
-				if (isBad(target_percent)) {
-					console.log('target_percent bad');
-					valid = false;
-					$('#target_percent_container SPAN.errorContainer').text( "Target percent must be a legit number.");
-				}
-				
+					
+				} else $('#percent_used_container SPAN.errorContainer').text( "");				
 				
 				if (!valid) {
 					console.log("form is not filled in correctly.");
 					return;
 				}
 				
-				var total = starter_percent / target_percent;
-				total = total * starter;
+				var total = percent_used / target_percent;
+				total = total * amount_flavored;
 				
-				var to_add = total - starter;
+				var syrup_add = total - amount_flavored;
 				
-				console.log("starter: " + starter);
-				console.log("starter_percent: " + starter_percent);
-				console.log("target_percent: " + target_percent);
-				console.log("total: " + total);
-				console.log("to add: " + to_add);
-				
-				//$('#liquid_total').val(total);
-				//$('#syrup_add').val(to_add);
-				
-			}  /*else if ($('#liquid_total').val() != '') {
-				var starter = $('#amount_macerated').val();
-				var starter_percent = $('#percent_used').val();
-				var total = $('#target_percent').val();
-				
-				var total = starter_percent / target_percent;
-				total = total * starter;
-				
-				var to_add = total - starter;
-				
-				$('#liquid_total').val(total);
-				$('#liquid_add').val(to_add);
+				$('#syrup_add').val( syrup_add );
+				$('#liquid_total').val( total );
+			}
 			
-			}*/
-			
-			
-			//$('#liquorMaker').preventDefault();
-			//return false;
+			return false;
 		}
 		
-		
+		function changeMode(mode) {
+			if (mode==='secondary') {
+				$('#mode1').hide();
+				$('#mode2').show();
+			} else {
+				$('#mode2').hide();
+				$('#mode1').show();
+			}
+		}
 		
 	</script>
 	
@@ -109,6 +91,9 @@
 			border-width: 2px;
 			background: #87C3FF;
 		}
+		INPUT[name="submit"]:hover {
+			cursor: pointer;
+		}
 		LABEL {
 			display: block;
 		}
@@ -129,8 +114,8 @@
 			overflow: auto;
 			color: #555;
 		}
-		DIV#info P {
-			font-size: 80%;
+		DIV#info DIV A {
+			margin: 1em 0;
 		}
 		H2 {
 			margin: 1em 0 0 0;
@@ -139,9 +124,20 @@
 		DIV#info H2:first-child {
 			margin-top: 0;
 		}
+		DIV#info UL {
+			list-style: none;
+			margin: 1em 0 2em 0;
+			padding: 0;
+		}
+		DIV#info UL LI {
+			margin: 0 0 .5em 0;
+			padding: 0;
+		}
 		H3 {
-			margin: 1em 0 0 0;
-			font-size: 1.1em;
+			margin: 0 0 1em 0;
+			font-size: .8em;
+			font-weight: normal;
+			color: #338;
 		}
 		P {
 			line-height: 130%;
@@ -149,6 +145,11 @@
 		.errorContainer {
 			font-size: .8em;
 			color: #c00;
+		}
+		.sub {
+			font-size: .8em;
+			font-style: italic;
+			padding: 0 1em;
 		}
 	</style>
 	
@@ -159,14 +160,14 @@
 	<h1>LiquorMaker</h1>
 
 	<form id="alcohol_form">
-		<div id="amount_macerated_container">
-			<label for="amount_macerated">Amount macerated:</label>
-			<input type="number" size="20" name="amount_macerated" id="amount_macerated" value="200" />
+		<div id="amount_flavored_container">
+			<label for="amount_flavored">Amount flavored:</label>
+			<input type="number" size="20" name="amount_flavored" id="amount_flavored" value="200" />
 			<span class="errorContainer"></span>
 		</div>
 		<div id="percent_used_container">
 			<label for="percent_used">Percent alcohol used:</label>
-			<input type="number" size="20" name="percent_used" id="percent_used" class="required" value="95" />
+			<input type="number" size="20" name="percent_used" id="percent_used" value="95" />
 			<span class="errorContainer"></span>
 		</div>
 		<div id="target_percent_container">
@@ -189,17 +190,36 @@
 		
 	</form>
 	
+	
 	<div id="info">
 		
-		<h2>What to Do</h2>
-		<p>First you need to macerate your flavorings. For limoncello the length of time varies but I follow Vincent Schiavelli's recipe and macerate citrus skins for 4 days (or so).</p>
+		<div id="mode1">
+			<h2>I boozed up some ingredients.</h2>
+			
+			<ul>
+				<li>How much booze are you flavorin'? [Amount flavored]</li>
+				<li>What is the percent of grain alcohol you used? [Percent alcohol used]</li>
+				<li>What is your target alcohol percent? [Target percent]</li>
+				<li>Once you have that, click <strong>Calculate</strong> to see how much syrup you need to add and how much total finished liquor you'll get from it.</li>
+			</ul>
+			
+			<a href="javascript:changeMode('secondary');">I need a 'pacific amount o' booze &raquo;</a>
+		</div>
 		
-		<p>When that's ready, measure the amount of macerated alcohol you have. Type that amount (I stick with the metric system) into the <strong>Amount macerated</strong> field. Then type in the <strong>percent of alcohol</strong> you used (grain alcohol ranges from 75% to 95%). Then type in your <strong>target percent</strong>. For limoncello, the standard is about 38%. Then click <strong>Calculate</strong> and you'll know how much syrup to add and how much liquor you'll end up with.</p>
-		
-		<h2>Why I Built LiquorMaker</h2>
-		<p>I built LiquorMaker to determine how much simple syrup to add to the macerated grain alcohol I use to make liquors like Limoncello. I start by macerating some lemon skins (or cinnamon sticks or <a href="http://www.ferrarapan.com/html/redhot.html" rel="external">Red Hots</a>) in grain alcohol (Everclear is what I use) and later adding simple syrup (sugar dissolved in water) to sweeten the grain alcohol and reduce the alcohol percentage.</p>
+		<div id="mode2" style="display:none">
+			<h2>I need a specific amount o' booze.</h2>
+			
+			<ul>
+				<li>How much booze do you want? [For a total]<li>
+				<li>What is the percent of grain alcohol you use? [Percent alcohol used]</li>
+				<li>Once you have that, click <strong>Calculate</strong> to figure out how much grain alcohol you have to flavor.</li>
+			</ul>
+			
+			<p><a href="javascript:changeMode('primary');">I boozed up some ingredients. How much it gonna make?</a></p>
+		</div>
 		
 	</div>
+	
 </div>
 
 </body>
