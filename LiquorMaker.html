@@ -7,6 +7,10 @@
 	<script src="http://code.jquery.com/jquery-latest.js" type="text/javascript" language="javascript"></script>
 	<script type="text/javascript">		
 	
+		// @TODO mobilize this thing so it looks proper on phones and tablets
+
+		var mode = 'primary';
+
 		$(document).ready(function(){
 			$('#alcohol_form INPUT[name="submit"]').click(function(){
 				calculate();
@@ -23,46 +27,70 @@
 			var percent_used = $('#percent_used').val();
 			var target_percent = $('#target_percent').val();
 			var liquid_total = $('#liquid_total').val();
-				
-				
-			if ( !isBad($('#target_percent').val()) ) {
-							
-				var valid = true;
-				
-				if (isBad(percent_used)) {
-					console.log('percent_used bad');
-					valid = false;
-					$('#percent_used_container SPAN.errorContainer').text( "Percent alcohol must be a legit number.");
-					
-				} else $('#percent_used_container SPAN.errorContainer').text( "");				
-				
-				if (!valid) {
-					console.log("form is not filled in correctly.");
-					return;
-				}
-				
-				var total = percent_used / target_percent;
-				total = total * amount_flavored;
-				
-				var syrup_add = total - amount_flavored;
-				
-				$('#syrup_add').val( syrup_add );
-				$('#liquid_total').val( total );
-			}
 			
+			// @TODO build elegant error reporting
+
+			if (mode === 'primary') {
+				if ( !isBad(target_percent) ) {
+								
+					var valid = true;
+					
+					if (isBad(percent_used)) {
+						console.log('percent_used bad');
+						valid = false;
+						$('#percent_used_container SPAN.errorContainer').text( "Percent alcohol must be a legit number.");
+						
+					} else $('#percent_used_container SPAN.errorContainer').text( "");				
+					
+					if (!valid) {
+						console.log("form is not filled in correctly.");
+						return;
+					}
+					
+					var total = percent_used / target_percent;
+					total = total * amount_flavored;
+					
+					var syrup_add = total - amount_flavored;
+					
+					$('#syrup_add').val( syrup_add );
+					$('#liquid_total').val( total );
+				}
+			} else {
+				// @TODO finish the math on this side
+				alert('need to get the math together for this');
+				/*
+				//percent_alc, target_perc, total
+				if (!isBad(target_percent) && !isBad(percent_used) && !isBad(liquid_total)) {
+					//determine amount_flavored, syrup to add
+					amount_flavored = 
+					var syrup_add = liquid_total - amount_flavored;
+				}
+				*/
+			}
 			return false;
 		}
 		
-		function changeMode(mode) {
-			if (mode==='secondary') {
+		function changeMode(newMode) {
+			if (newMode==='secondary') {
 				$('#mode1').hide();
 				$('#mode2').show();
+				emptyFields();
 			} else {
 				$('#mode2').hide();
 				$('#mode1').show();
+				emptyFields();
 			}
+			mode = newMode;
 		}
 		
+		function emptyFields() {
+			$('#amount_flavored').val('');
+			$('#percent_used').val('');
+			$('#target_percent').val('');
+			$('#syrup_add').val('');
+			$('#liquid_total').val('');
+		}
+
 	</script>
 	
 	<style type="text/css">
@@ -210,8 +238,9 @@
 			<h2>I need a specific amount o' booze.</h2>
 			
 			<ul>
-				<li>How much booze do you want? [For a total]<li>
 				<li>What is the percent of grain alcohol you use? [Percent alcohol used]</li>
+				<li>What percent alcohol do you want your final product to be? [Target percent]</li>
+				<li>How much booze do you want? [For a total]<li>
 				<li>Once you have that, click <strong>Calculate</strong> to figure out how much grain alcohol you have to flavor.</li>
 			</ul>
 			
