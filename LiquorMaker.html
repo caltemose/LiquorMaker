@@ -15,27 +15,42 @@
 				resetFields();
 			});
 		});
+		function roundAmount(amt) {
+			amt = Math.round(amt); //(Math.round(amt*100)/100);
+			return amt;
+		}
 		function calculate() {
 			var amount_flavored = $('#amount_flavored').val(),
 				percent_used = $('#percent_used').val(),
 				target_percent = $('#target_percent').val(),
 				liquid_total = $('#liquid_total').val(),
-				syrup_add, ratio, total;
+				syrup_add, syrupCombined, syrupWater, syrupSugar, ratio, total;
 				
 			if ( !isBad(amount_flavored) ) {
 				if ( !isBad(target_percent) && !isBad(percent_used) ) {					
 					ratio = percent_used / target_percent;
 					total = ratio * amount_flavored;
+					total = roundAmount(total);
 					syrup_add = total - amount_flavored;	
+					syrup_add = roundAmount(syrup_add);
 					$('#syrup_add').val( syrup_add );
 					$('#liquid_total').val( total );
+					syrupCombined = syrup_add * 1.164;
+					syrupWater = syrupCombined * 0.6135;
+					syrupSugar = syrupCombined - syrupWater;
+					$('#syrup_add_help').text("Mix " + roundAmount(syrupWater) +  " water with " + roundAmount(syrupSugar) + " sugar.");
+
 				}
 			} else if ( !isBad(liquid_total) ) {
 				if (!isBad(target_percent) && !isBad(percent_used)) {
 					amount_flavored = liquid_total / (percent_used/target_percent);
 					syrup_add = liquid_total - amount_flavored;
-					$('#syrup_add').val( syrup_add );
-					$('#amount_flavored').val( amount_flavored );
+					$('#syrup_add').val( roundAmount(syrup_add) );
+					$('#amount_flavored').val( roundAmount(amount_flavored) );
+					syrupCombined = syrup_add * 1.164;
+					syrupWater = syrupCombined * 0.6135;
+					syrupSugar = syrupCombined - syrupWater;
+					$('#syrup_add_help').text("Mix " + roundAmount(syrupWater) +  " water with " + roundAmount(syrupSugar) + " sugar.");
 				}
 			}
 			return false;
@@ -43,14 +58,16 @@
 		function isBad(value) { return value==''||isNaN(value);}
 		function resetFields() {
 			$('#percent_used').val(95);
-			$('#target_percent').val(38);
+			$('#target_percent').val(34);
 			$('#syrup_add').val('');
+			$('#syrup_add_help').text('The syrup recipe will appear here.');
 			$('#liquid_total').val('');
 			$('#amount_flavored').val('');
 		}
 	</script>
 	
 	<style type="text/css">
+		* { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
 		body {
 			font-family: Arial, sans-serif;
 			font-size: 100%;
@@ -59,13 +76,13 @@
 			background: #fff;
 		}
 		form#alcohol_form {
-			float: left;
 			position: relative;
-			width: 15em;
+			width: 100%;
 			padding: 1em;
 			border: 1px solid #ccc;
 			background: #ddd;
 		}
+		
 		input {
 			font-size: 130%;
 			width: 100%;
@@ -88,39 +105,38 @@
 		input[name="submit"]:hover, button[name="reset"]:hover {
 			cursor: pointer;
 		}
+
 		label {
 			display: block;
 		}
+
 		form div {
 			margin: 0 0 1em 0;
 		}
 		h2 {
-			margin: 1em 0 0 0;
+			margin: 1em 0 1em 0;
 			padding: 0;
 		}
 		h3 {
-			margin: 0 0 1em 0;
-			font-size: .8em;
-			font-weight: normal;
-			color: #338;
+			margin: 0 0 0.5em 0;
+			font-size: 1em;
+			font-weight: bold;
 		}
 		p {
 			line-height: 130%;
 		}
 
 		div#liquorMaker {
-			width: 47em;
+			max-width: 30em;
 			margin: 0 auto;
 			overflow: auto;
 		}
+
 		div#info {
-			float: left;
 			position: relative;
-			margin: 0 0 1em 1em;
-			padding: 1em;
-			width: 25em;
-			border: 1px solid #ddd;
-			color: #555;
+			margin: 1em 0;
+			padding: 0;
+			width: 100%;
 		}
 		div#info div a {
 			margin: 1em 0;
@@ -128,13 +144,12 @@
 		div#info h2:first-child {
 			margin-top: 0;
 		}
-		div#info ul {
-			list-style: none;
-			margin: 1em 0 2em 0;
+		ol {
+			margin: 0 0 2em 1.3em;
 			padding: 0;
 		}
-		div#info ul li {
-			margin: 0 0 .5em 0;
+		li {
+			margin: 0 0 0.6em 0;
 			padding: 0;
 		}
 		span.help {
@@ -156,7 +171,29 @@
 		span.field {
 			margin: 0 .1em;
 			padding: 0 .2em;
-			background: #a6d0e6;
+			background: #daf7ff;
+		}
+		
+		@media screen and (min-width: 45em) {
+			.mobile-instructions {
+				display: none;
+			}
+			div#liquorMaker {
+				width: 100%;
+				max-width: 63em;
+			}
+			form#alcohol_form, div#info {
+				float: left;
+				position: relative;
+				width: 50%;
+			}
+			div#info {
+				padding-left: 1em;
+			}
+			div#more-info {
+				padding-top: 2em;
+				clear: both;
+			}
 		}
 	</style>
 	
@@ -166,11 +203,10 @@
 <div id="liquorMaker">
 	<h1>LiquorMaker</h1>
 
-	<p>
-		This tool is for determining amounts of ingredients to use when making your own liquors. 
-		If you don't know how to make flavored alcohols, figure that out first before using this tool.
-	</p>
+	<p class="mobile-instructions"><a href="#info">Instructions</a> for using this tool are below the form.</p>
 
+	<p>This tool is for determining amounts of ingredients to use when making your own liquors. 
+		If you don't know how to make flavored alcohols, figure that out first before using this tool. I have <a href="#more-info">basic instructions</a> at the bottom of this page and links to some helpful resources.</p>
 
 	<form id="alcohol_form">
 		<div id="amount_flavored_container">
@@ -185,7 +221,7 @@
 		</div>
 		<div id="target_percent_container">
 			<label for="target_percent">Target percent:</label>
-			<input type="number" size="20" name="target_percent" id="target_percent"  value="38" />
+			<input type="number" size="20" name="target_percent" id="target_percent"  value="34" />
 			<span class="errorContainer"></span>
 		</div>
 		<div id="syrup_add_container">
@@ -206,12 +242,37 @@
 	
 
 	<div id="info">
+		<h2>How this Works</h2>
+		<h3>If you've already flavored some grain alcohol:</h3>
+		<ol>
+			<li>Type in the amount of booze you have flavored.</li>
+			<li>Click calculate to see how much syrup to add and how much booze you'll get.</li>
+		</ol>
 		
-		<p><strong>If you've already flavored some grain alcohol</strong> or plain vodka with some ingredients (cinnamon sticks, lemon peels, etc), just type in the amount of booze you have flavored (<span class="field">Amount flavored</span>) and click calculate to see how much syrup to add and how much booze you'll end up with.</p>
+		<h3>If you haven't started and you are shooting for a specific amount of finished liquor:</h3>
+		<ol>
+			<li>Type in your total amount desired.</li>
+			<li>Click Calculate to see how much grain alcohol to flavor and how much syrup you'll need.</li>
+		</ol>
 		
-		<p>If <strong>you haven't started and you are shooting for a specific amount of finished liquor</strong>, type in your total amount desired (<span class="field">For a total</span>) and calculate how much grain alcohol to flavor and how much syrup you'll need.</p>
-		
-		<p>In either case, you can optionally change the <span class="field">Percent alcohol</span> and <span class="field">Target percent</span> if you need to (these values are my defaults).</p>	
+		<p>In either case, you can optionally change the <span class="field">Percent alcohol</span> and <span class="field">Target percent</span> if you need to (these values are my defaults).</p>
+
+		<p>Above the <span class="field">Syrup to add</span> field you'll see the amount of water and sugar you need to use to make your simple syrup.</p>
+	</div>
+
+	<div id="more-info">
+		<h2>Help and Resources</h2>
+		<p>The process I use for limoncello and similar liquors is simple. These basic instructions are for macerating a pint of grain alcohol with lemon peel.</p>
+		<ol>
+			<li>Peel the skin off 3-4 lemons. For this you need to remove the pith (white part) so you'll end up with paper-thin slices of lemon peel. If you don't remove pith, your limoncello may be bitter.</li>
+			<li>Put the skins in the pint jar and fill it almost to the top with grain alcohol (I use Everclear).</li>
+			<li>Leave it for 4-6 days (or so -- the peels will fade in color as the liquor absorbs the flavor).</li>
+			<li>Mix the alcohol with the simple syrup (amount indicated in the form here) and bottle it.</li>
+			<li>Don't drink too much at once or you'll have one of the worse hangovers imagineable.</li>
+		</ol>
+		<p>I use Meyer lemons from my Mom's tree so I get the highest quality organic lemons. These lemons are similar (if not the same) as the glorious lemons in the south west of Italy (Amalfi) which is known for its glorious lemons. They are sweet enough to eat right off the tree.</p>
+		<p>You can also use any kind of citrus here and follow the same recipe. Blood orange is one of my favorites.</p>
+		<p>Additionally you can use coffee, cinnamon, red hots, or other spices (star anise -> anisette), etc. The maceration times may differ though (with cinnamon we macerate in alcohol for a month).</p>
 	</div>
 
 	
