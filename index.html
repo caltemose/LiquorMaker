@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>LiquorMaker</title>
+  <!-- @TODO write description/get from readme -->
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <article>
+    <h1>LiquorMaker</h1>
+
+    <p class="mobile-instructions"><a href="#info">Instructions</a> for using this tool are below the form.</p>
+
+    <p>This tool is for determining amounts of ingredients to use when making your own liquors. If you don't know how to make flavored alcohols, figure that out first before using this tool. I have <a href="#more-info">basic instructions</a> at the bottom of this page and links to some helpful resources.</p>
+
+    <form id="lm_form">
+      
+      <label>
+        Amount flavored:
+        <input type="number" size="20" name="amount_flavored" />
+        <small></small>
+      </label>
+        
+      <label>
+        Percent alcohol used:
+        <input type="number" size="20" name="percent_used" value="95" />
+        <small></small>
+      </label>
+        
+      <label>
+        Target percent:
+        <input type="number" size="20" name="percent_target" value="34" />
+        <small></small>
+      </label>
+        
+      <label>
+        Syrup to add:
+        <input type="number" size="20" name="syrup_add" />
+        <small>The syrup recipe will appear here.</small>
+      </label> 
+    
+      <label>
+        For a total:
+        <input type="number" size="20" name="liquid_total" />
+        <small></small>
+      </label>
+      
+      <input type="submit" name="submit" value="Calculate" />
+      <button type="reset" name="reset">Reset</button>
+    </form>
+    
+
+    <section id="info">
+      <h2>How this Works</h2>
+      <h3>If you've already flavored some grain alcohol:</h3>
+      <ol>
+        <li>Type in the amount of booze you have flavored.</li>
+        <li>Click calculate to see how much syrup to add and how much booze you'll get.</li>
+      </ol>
+      
+      <h3>If you haven't started and you are shooting for a specific amount of finished liquor:</h3>
+      <ol>
+        <li>Type in your total amount desired.</li>
+        <li>Click Calculate to see how much grain alcohol to flavor and how much syrup you'll need.</li>
+      </ol>
+      
+      <p>In either case, you can optionally change the <em class="field">Percent alcohol</em> and <em class="field">Target percent</em> if you need to (these values are my defaults).</p>
+
+      <p>Above the <span class="field">Syrup to add</span> field you'll see the amount of water and sugar you need to use to make your simple syrup.</p>
+    </section>
+
+    <section id="more-info">
+      <h2>Help and Resources</h2>
+      <p>The process I use for limoncello and similar liquors is simple. These basic instructions are for macerating a pint of grain alcohol with lemon peel.</p>
+      <ol>
+        <li>Peel the skin off 3-4 lemons. For this you need to remove the pith (white part) so you'll end up with paper-thin slices of lemon peel. If you don't remove pith, your limoncello may be bitter.</li>
+        <li>Put the skins in the pint jar and fill it almost to the top with grain alcohol (I use Everclear).</li>
+        <li>Leave it for 4-6 days (or so -- the peels will fade in color as the liquor absorbs the flavor).</li>
+        <li>Mix the alcohol with the simple syrup (amount indicated in the form here) and bottle it.</li>
+        <li>Don't drink too much at once or you'll have one of the worse hangovers imagineable.</li>
+      </ol>
+      <p>I use Meyer lemons from my Mom's tree so I get the highest quality organic lemons. These lemons are similar (if not the same) as the glorious lemons in the south west of Italy (Amalfi) which is known for its glorious lemons. They are sweet enough to eat right off the tree.</p>
+      <p>You can also use any kind of citrus here and follow the same recipe. Blood orange is one of my favorites.</p>
+      <p>Additionally you can use coffee, cinnamon, red hots, or other spices (star anise -> anisette), etc. The maceration times may differ though (with cinnamon we macerate in alcohol for a month).</p>
+    </section>
+
+  </article>
+
+  <!-- @TODO: change this to zepto or not? -->
+  <script src="http://code.jquery.com/jquery-latest.js" type="text/javascript" language="javascript"></script>
+  <!-- calculator functionality -->
+  <script src="liquorMaker.js"></script>
+
+</body>
+</html>

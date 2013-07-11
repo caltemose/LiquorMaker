@@ -1,0 +1,128 @@
+* { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
+body {
+  font-family: Arial, sans-serif;
+  font-size: 100%;
+  margin: 1em;
+  padding: 0;
+  background: #fff;
+}
+form#alcohol_form {
+  position: relative;
+  width: 100%;
+  padding: 1em;
+  border: 1px solid #ccc;
+  background: #ddd;
+}
+
+input {
+  font-size: 130%;
+  width: 100%;
+}
+input[name="submit"] {
+  border-radius: 0.5em;
+  border-color: #2B62FF;
+  border-width: 2px;
+  background: #87C3FF;
+}
+button[name="reset"] {
+  font-size: 130%;
+  width: 100%;
+  color: #450000;
+  border-radius: 0.5em;
+  border-color: #790000;
+  border-width: 2px;
+  background: #e46060;
+}
+input[name="submit"]:hover, button[name="reset"]:hover {
+  cursor: pointer;
+}
+
+label {
+  display: block;
+}
+
+form div {
+  margin: 0 0 1em 0;
+}
+h2 {
+  margin: 1em 0 1em 0;
+  padding: 0;
+}
+h3 {
+  margin: 0 0 0.5em 0;
+  font-size: 1em;
+  font-weight: bold;
+}
+p {
+  line-height: 130%;
+}
+
+div#liquorMaker {
+  max-width: 30em;
+  margin: 0 auto;
+  overflow: auto;
+}
+
+div#info {
+  position: relative;
+  margin: 1em 0;
+  padding: 0;
+  width: 100%;
+}
+div#info div a {
+  margin: 1em 0;
+}
+div#info h2:first-child {
+  margin-top: 0;
+}
+ol {
+  margin: 0 0 2em 1.3em;
+  padding: 0;
+}
+li {
+  margin: 0 0 0.6em 0;
+  padding: 0;
+}
+span.help {
+  display: block;
+  margin: 0.3em 0;
+  font-size: .8em;
+  color: #777;
+  line-height: 110%;
+}
+.errorContainer {
+  font-size: .8em;
+  color: #c00;
+}
+.sub {
+  font-size: .8em;
+  font-style: italic;
+  padding: 0 1em;
+}
+span.field {
+  margin: 0 .1em;
+  padding: 0 .2em;
+  background: #daf7ff;
+}
+
+@media screen and (min-width: 45em) {
+  .mobile-instructions {
+    display: none;
+  }
+  div#liquorMaker {
+    width: 100%;
+    max-width: 63em;
+  }
+  form#alcohol_form, div#info {
+    float: left;
+    position: relative;
+    width: 50%;
+  }
+  div#info {
+    padding-left: 1em;
+  }
+  div#more-info {
+    padding-top: 2em;
+    clear: both;
+  }
+}
