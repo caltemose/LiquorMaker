@@ -1,8 +1,7 @@
 var liqrmakr = liqrmakr || {};
 
 liqrmakr.calculator = (function($) {
-  var container;
-
+  var container, flavored, percent, target, syrup, syrupMsg, total;
   function initialize(options) {
     container = options.container;
     createMarkup();
@@ -17,6 +16,7 @@ liqrmakr.calculator = (function($) {
     html += '<input type="submit" name="submit" value="Calculate" />';
     html += '<button type="reset" name="reset">Reset</button>';
     container.html(html);
+    getSelections();
     bindButtons();
   }
   function createInput(label, name, value, small) {
@@ -30,6 +30,14 @@ liqrmakr.calculator = (function($) {
     html += '</label>';
     html += "\n";
     return html;
+  }
+  function getSelections() {
+    flavored = $('input[name="liqrmakr_flavored"]', container);
+    percent = $('input[name="liqrmakr_percent"]', container);
+    target = $('input[name="liqrmakr_target"]', container);
+    syrup = $('input[name="liqrmakr_syrup"]', container);
+    syrupMsg = $('small', syrup);
+    total = $('input[name="liqrmakr_total"]', container);
   }
   function bindButtons(){
     var calc = calculate, reset = resetFields;
@@ -49,20 +57,48 @@ liqrmakr.calculator = (function($) {
     return value === '' || isNaN(value);
   }
   function resetFields() {
-    /*
-    $('#percent_used').val(95);
-    $('#target_percent').val(34);
-    $('#syrup_add').val('');
-    $('#syrup_add_help').text('The syrup recipe will appear here.');
-    $('#liquid_total').val('');
-    $('#amount_flavored').val('');
-    */
+    console.log('liqrmakr.resetFields()');
+    flavored.val('');
+    percent.val(95);
+    target.val(34);
+    syrup.val('');
+    syrupMsg.text('The syrup recipe will appear here.');
+    total.val('');
   }
   function calculate() {
-    console.log('calculate()');
+    console.log('liqrmakr.calculate()');
+    var flavoredAmount, totalAmount, syrupToAdd, syrupCombined, syrupWater, syrupSugar;
+
+    if ( !isBad(flavored.val()) ) {
+      if ( !isBad(target.val()) && !isBad(percent.val()) ) {         
+        ratio = percent.val() / target.val();
+        totalAmount = ratio * flavored.val();
+        totalAmount = roundAmount(totalAmount);
+        syrupToAdd = totalAmount - flavored.val();  
+        syrupToAdd = roundAmount(syrupToAdd);
+        syrup.val(syrupToAdd);
+        total.val(totalAmount);
+        syrupCombined = syrupToAdd * 1.164;
+        syrupWater = syrupCombined * 0.6135;
+        syrupSugar = syrupCombined - syrupWater;
+        syrupMsg.text("Mix " + roundAmount(syrupWater) +  " water with " + roundAmount(syrupSugar) + " sugar.");
+      }
+    } else if ( !isBad(total.val()) ) {
+      if (!isBad(target.val()) && !isBad(percent.val())) {
+        flavoredAmount = total.val() / (percent.val()/target.val());
+        syrupToAdd = total.val() - flavoredAmount;
+        syrup.val(roundAmount(syrupToAdd));
+        flavored.val(roundAmount(flavoredAmount));
+        syrupCombined = syrupToAdd * 1.164;
+        syrupWater = syrupCombined * 0.6135;
+        syrupSugar = syrupCombined - syrupWater;
+        syrupMsg.text("Mix " + roundAmount(syrupWater) +  " water with " + roundAmount(syrupSugar) + " sugar.");
+      }
+    }
+    return false;
   }
   return {
-    init: initialize;
+    init: initialize
   }
 })(jQuery);
 
@@ -70,62 +106,3 @@ liqrmakr.calculator = (function($) {
 $(function(){
   liqrmakr.calculator.init({container:$('#liqrmakr')});
 });
-
-
-/*
-$(document).ready(function(){
-  $('#alcohol_form INPUT[name="submit"]').click(function(){
-    calculate();
-    return false;
-  });
-  $('#alcohol_form button[name="reset"]').click(function(){
-    resetFields();
-  });
-});
-
-function calculate() {
-  var amount_flavored = $('#amount_flavored').val(),
-    percent_used = $('#percent_used').val(),
-    target_percent = $('#target_percent').val(),
-    liquid_total = $('#liquid_total').val(),
-    syrup_add, syrupCombined, syrupWater, syrupSugar, ratio, total;
-    
-  if ( !isBad(amount_flavored) ) {
-    if ( !isBad(target_percent) && !isBad(percent_used) ) {         
-      ratio = percent_used / target_percent;
-      total = ratio * amount_flavored;
-      total = roundAmount(total);
-      syrup_add = total - amount_flavored;  
-      syrup_add = roundAmount(syrup_add);
-      $('#syrup_add').val( syrup_add );
-      $('#liquid_total').val( total );
-      syrupCombined = syrup_add * 1.164;
-      syrupWater = syrupCombined * 0.6135;
-      syrupSugar = syrupCombined - syrupWater;
-      $('#syrup_add_help').text("Mix " + roundAmount(syrupWater) +  " water with " + roundAmount(syrupSugar) + " sugar.");
-
-    }
-  } else if ( !isBad(liquid_total) ) {
-    if (!isBad(target_percent) && !isBad(percent_used)) {
-      amount_flavored = liquid_total / (percent_used/target_percent);
-      syrup_add = liquid_total - amount_flavored;
-      $('#syrup_add').val( roundAmount(syrup_add) );
-      $('#amount_flavored').val( roundAmount(amount_flavored) );
-      syrupCombined = syrup_add * 1.164;
-      syrupWater = syrupCombined * 0.6135;
-      syrupSugar = syrupCombined - syrupWater;
-      $('#syrup_add_help').text("Mix " + roundAmount(syrupWater) +  " water with " + roundAmount(syrupSugar) + " sugar.");
-    }
-  }
-  return false;
-}
-function isBad(value) { return value==''||isNaN(value);}
-function resetFields() {
-  $('#percent_used').val(95);
-  $('#target_percent').val(34);
-  $('#syrup_add').val('');
-  $('#syrup_add_help').text('The syrup recipe will appear here.');
-  $('#liquid_total').val('');
-  $('#amount_flavored').val('');
-}
-*/
