@@ -1,34 +1,51 @@
 var liqrmakr = liqrmakr || {};
+
 liqrmakr.calculator = (function($) {
   var container;
-  
+
   function initialize(options) {
-	container = options.container;
-	createMarkup();
+    container = options.container;
+    createMarkup();
   }
   function createMarkup() {
-  	var html = '';
-  	html += createInput("Amount flavored", "liqrmakr_flavored");
-  	html += createInput("Percent alcohol used", "liqrmakr_percent");//, 95);
-  	html += createInput("Target percent", "liqrmakr_target");//, 34);
-  	html += createInput("Syrup to add", "liqrmakr_syrup");//, '', "The syrup recipe will appear here");
-  	html += createInput("For a total", "liqrmakr_total");
-  	container.html(html);
+    var html = '';
+    html += createInput("Amount flavored", "liqrmakr_flavored");
+    html += createInput("Percent alcohol used", "liqrmakr_percent", 95);
+    html += createInput("Target percent", "liqrmakr_target", 34);
+    html += createInput("Syrup to add", "liqrmakr_syrup", '', "The syrup recipe will appear here");
+    html += createInput("For a total", "liqrmakr_total");
+    html += '<input type="submit" name="submit" value="Calculate" />';
+    html += '<button type="reset" name="reset">Reset</button>';
+    container.html(html);
+    bindButtons();
   }
-  function createInput(label, name) { //, value='', small='') {
-  	var html = '<label>' + label;
-  	html += '<input type="number" size="20" name="' + name + '" value="' + '' + '" />';
-  	html += '<small>';
-  	//html += small;
-  	html += '</small>';
-  	html += '</label>';
-  	html += "\n";
-  	return html;
+  function createInput(label, name, value, small) {
+    value = (typeof value === "undefined") ? "" : value;
+    small = (typeof small === "undefined") ? "" : small;
+    var html = '<label>' + label;
+    html += '<input type="number" size="20" name="' + name + '" value="' + value + '" />';
+    html += '<small>';
+    html += small;
+    html += '</small>';
+    html += '</label>';
+    html += "\n";
+    return html;
+  }
+  function bindButtons(){
+    var calc = calculate, reset = resetFields;
+    $('input[name="submit"]', container).click(function(){
+      calc();
+      return false;
+    });
+    $('button[name="reset"]', container).click(function(){
+      reset();
+      return false;
+    });
   }
   function roundAmount(amt) {
     return Math.round(amt);
   }
-  function isBad(value) { 
+  function isBad(value) {
     return value === '' || isNaN(value);
   }
   function resetFields() {
@@ -41,8 +58,11 @@ liqrmakr.calculator = (function($) {
     $('#amount_flavored').val('');
     */
   }
+  function calculate() {
+    console.log('calculate()');
+  }
   return {
-    init: initialize
+    init: initialize;
   }
 })(jQuery);
 
@@ -50,46 +70,6 @@ liqrmakr.calculator = (function($) {
 $(function(){
   liqrmakr.calculator.init({container:$('#liqrmakr')});
 });
-
-/*
-
-    <form id="lm_form">
-      
-      <label>
-        Amount flavored:
-        <input type="number" size="20" name="amount_flavored" />
-        <small></small>
-      </label>
-        
-      <label>
-        Percent alcohol used:
-        <input type="number" size="20" name="percent_used" value="95" />
-        <small></small>
-      </label>
-        
-      <label>
-        Target percent:
-        <input type="number" size="20" name="percent_target" value="34" />
-        <small></small>
-      </label>
-        
-      <label>
-        Syrup to add:
-        <input type="number" size="20" name="syrup_add" />
-        <small>The syrup recipe will appear here.</small>
-      </label> 
-    
-      <label>
-        For a total:
-        <input type="number" size="20" name="liquid_total" />
-        <small></small>
-      </label>
-      
-      <input type="submit" name="submit" value="Calculate" />
-      <button type="reset" name="reset">Reset</button>
-    </form>
-    
-*/
 
 
 /*
@@ -103,10 +83,6 @@ $(document).ready(function(){
   });
 });
 
-function roundAmount(amt) {
-  amt = Math.round(amt); //(Math.round(amt*100)/100);
-  return amt;
-}
 function calculate() {
   var amount_flavored = $('#amount_flavored').val(),
     percent_used = $('#percent_used').val(),
