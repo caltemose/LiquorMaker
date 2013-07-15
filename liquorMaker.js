@@ -4,26 +4,26 @@ liqrmakr.calculator = (function($) {
   
   function initialize(options) {
 	container = options.container;
-	this.createMarkup();
+	createMarkup();
   }
   function createMarkup() {
   	var html = '';
-  	html += this.createInput("Amount flavored", "liqrmakr_flavored");
-  	html += this.createInput("Percent alcohol used", "liqrmakr_percent", 95);
-  	html += this.createInput("Target percent", "liqrmakr_target", 34);
-  	html += this.createInput("Syrup to add", "liqrmakr_syrup", '', "The syrup recipe will appear here");
-  	html += this.createInput("For a total", "liqrmakr_total");
-  	
-  	this.container.html(html);
+  	html += createInput("Amount flavored", "liqrmakr_flavored");
+  	html += createInput("Percent alcohol used", "liqrmakr_percent");//, 95);
+  	html += createInput("Target percent", "liqrmakr_target");//, 34);
+  	html += createInput("Syrup to add", "liqrmakr_syrup");//, '', "The syrup recipe will appear here");
+  	html += createInput("For a total", "liqrmakr_total");
+  	container.html(html);
   }
-  function createInput(label, name, value='', small='') {
+  function createInput(label, name) { //, value='', small='') {
   	var html = '<label>' + label;
-  	html += '<input type="number" size="20" name="' + name + '" value="' + value + '" />';
+  	html += '<input type="number" size="20" name="' + name + '" value="' + '' + '" />';
   	html += '<small>';
-  	html += small;
+  	//html += small;
   	html += '</small>';
   	html += '</label>';
   	html += "\n";
+  	return html;
   }
   function roundAmount(amt) {
     return Math.round(amt);
@@ -32,12 +32,14 @@ liqrmakr.calculator = (function($) {
     return value === '' || isNaN(value);
   }
   function resetFields() {
+    /*
     $('#percent_used').val(95);
     $('#target_percent').val(34);
     $('#syrup_add').val('');
     $('#syrup_add_help').text('The syrup recipe will appear here.');
     $('#liquid_total').val('');
     $('#amount_flavored').val('');
+    */
   }
   return {
     init: initialize
