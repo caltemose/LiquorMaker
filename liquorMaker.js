@@ -1,3 +1,76 @@
+var liqrmakr = liqrmakr || {};
+liqrmakr.calculator = (function($) {
+  var container;
+  
+  function initialize(options) {
+	container = options.container;
+  }
+  function roundAmount(amt) {
+    return Math.round(amt);
+  }
+  function isBad(value) { 
+    return value === '' || isNaN(value);
+  }
+  function resetFields() {
+    $('#percent_used').val(95);
+    $('#target_percent').val(34);
+    $('#syrup_add').val('');
+    $('#syrup_add_help').text('The syrup recipe will appear here.');
+    $('#liquid_total').val('');
+    $('#amount_flavored').val('');
+  }
+  return {
+    init: initialize
+  }
+})(jQuery);
+
+
+$(function(){
+  liqrmakr.calculator.init({container:$('#liqrmakr')});
+});
+
+/*
+
+    <form id="lm_form">
+      
+      <label>
+        Amount flavored:
+        <input type="number" size="20" name="amount_flavored" />
+        <small></small>
+      </label>
+        
+      <label>
+        Percent alcohol used:
+        <input type="number" size="20" name="percent_used" value="95" />
+        <small></small>
+      </label>
+        
+      <label>
+        Target percent:
+        <input type="number" size="20" name="percent_target" value="34" />
+        <small></small>
+      </label>
+        
+      <label>
+        Syrup to add:
+        <input type="number" size="20" name="syrup_add" />
+        <small>The syrup recipe will appear here.</small>
+      </label> 
+    
+      <label>
+        For a total:
+        <input type="number" size="20" name="liquid_total" />
+        <small></small>
+      </label>
+      
+      <input type="submit" name="submit" value="Calculate" />
+      <button type="reset" name="reset">Reset</button>
+    </form>
+    
+*/
+
+
+/*
 $(document).ready(function(){
   $('#alcohol_form INPUT[name="submit"]').click(function(){
     calculate();
@@ -57,3 +130,4 @@ function resetFields() {
   $('#liquid_total').val('');
   $('#amount_flavored').val('');
 }
+*/
