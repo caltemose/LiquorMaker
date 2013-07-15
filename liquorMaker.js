@@ -4,6 +4,26 @@ liqrmakr.calculator = (function($) {
   
   function initialize(options) {
 	container = options.container;
+	this.createMarkup();
+  }
+  function createMarkup() {
+  	var html = '';
+  	html += this.createInput("Amount flavored", "liqrmakr_flavored");
+  	html += this.createInput("Percent alcohol used", "liqrmakr_percent", 95);
+  	html += this.createInput("Target percent", "liqrmakr_target", 34);
+  	html += this.createInput("Syrup to add", "liqrmakr_syrup", '', "The syrup recipe will appear here");
+  	html += this.createInput("For a total", "liqrmakr_total");
+  	
+  	this.container.html(html);
+  }
+  function createInput(label, name, value='', small='') {
+  	var html = '<label>' + label;
+  	html += '<input type="number" size="20" name="' + name + '" value="' + value + '" />';
+  	html += '<small>';
+  	html += small;
+  	html += '</small>';
+  	html += '</label>';
+  	html += "\n";
   }
   function roundAmount(amt) {
     return Math.round(amt);
