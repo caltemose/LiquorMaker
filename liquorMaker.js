@@ -57,7 +57,6 @@ liqrmakr.calculator = (function($) {
     return value === '' || isNaN(value);
   }
   function resetFields() {
-    console.log('liqrmakr.resetFields()');
     flavored.val('');
     percent.val(95);
     target.val(34);
@@ -66,7 +65,6 @@ liqrmakr.calculator = (function($) {
     total.val('');
   }
   function calculate() {
-    console.log('liqrmakr.calculate()');
     var flavoredAmount, totalAmount, syrupToAdd, syrupCombined, syrupWater, syrupSugar;
 
     if ( !isBad(flavored.val()) ) {
@@ -101,8 +99,3 @@ liqrmakr.calculator = (function($) {
     init: initialize
   }
 })(jQuery);
-
-
-$(function(){
-  liqrmakr.calculator.init({container:$('#liqrmakr')});
-});

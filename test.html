@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>LiquorMaker Test</title>
+  <!-- @TODO write description/get from readme -->
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <article>
+    <form id="liqrmakr"></form>
+  </article>
+
+  <script src="http://code.jquery.com/jquery-latest.js" type="text/javascript" language="javascript"></script>
+  <script src="liquorMaker.js"></script>
+  <script>
+    $(function(){
+      liqrmakr.calculator.init({container:$('#liqrmakr')});
+    });
+  </script>
+</body>
+</html>
