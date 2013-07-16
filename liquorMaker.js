@@ -4,6 +4,7 @@ liqrmakr.calculator = (function($) {
   var container, flavored, percent, target, syrup, syrupMsg, total;
   function initialize(options) {
     container = options.container;
+    container.addClass("liqrmakr");
     createMarkup();
   }
   function createMarkup() {
@@ -36,7 +37,7 @@ liqrmakr.calculator = (function($) {
     percent = $('input[name="liqrmakr_percent"]', container);
     target = $('input[name="liqrmakr_target"]', container);
     syrup = $('input[name="liqrmakr_syrup"]', container);
-    syrupMsg = $('small', syrup);
+    syrupMsg = syrup.parent().find('small');
     total = $('input[name="liqrmakr_total"]', container);
   }
   function bindButtons(){
@@ -65,7 +66,7 @@ liqrmakr.calculator = (function($) {
     total.val('');
   }
   function calculate() {
-    var flavoredAmount, totalAmount, syrupToAdd, syrupCombined, syrupWater, syrupSugar;
+    var flavoredAmount, totalAmount, syrupToAdd, syrupCombined, syrupWater, syrupSugar, msg;
 
     if ( !isBad(flavored.val()) ) {
       if ( !isBad(target.val()) && !isBad(percent.val()) ) {         
@@ -79,7 +80,9 @@ liqrmakr.calculator = (function($) {
         syrupCombined = syrupToAdd * 1.164;
         syrupWater = syrupCombined * 0.6135;
         syrupSugar = syrupCombined - syrupWater;
-        syrupMsg.text("Mix " + roundAmount(syrupWater) +  " water with " + roundAmount(syrupSugar) + " sugar.");
+        msg = "Mix " + roundAmount(syrupWater) +  " water with " + roundAmount(syrupSugar) + " sugar.";
+        console.log(msg);
+        syrupMsg.text(msg);
       }
     } else if ( !isBad(total.val()) ) {
       if (!isBad(target.val()) && !isBad(percent.val())) {
@@ -90,7 +93,9 @@ liqrmakr.calculator = (function($) {
         syrupCombined = syrupToAdd * 1.164;
         syrupWater = syrupCombined * 0.6135;
         syrupSugar = syrupCombined - syrupWater;
-        syrupMsg.text("Mix " + roundAmount(syrupWater) +  " water with " + roundAmount(syrupSugar) + " sugar.");
+        msg = "Mix " + roundAmount(syrupWater) +  " water with " + roundAmount(syrupSugar) + " sugar.";
+        console.log(msg);
+        syrupMsg.text(msg);
       }
     }
     return false;
